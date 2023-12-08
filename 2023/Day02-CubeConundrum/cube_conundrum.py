@@ -51,8 +51,15 @@ def is_allowed(handfuls: list[dict]):
                 for handful in handfuls])
 
 
-with open(input_args.input, 'r') as file:
-    lines = file.readlines()
-lines = [parse_line(line) for line in lines]
-total = sum([gameid for gameid, handfuls in lines if is_allowed(handfuls)])
-print(total)
+def read_file(filename: str):
+    lines = None
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+    return lines
+
+
+if __name__ == '__main__':
+    lines = read_file(input_args.input)
+    lines = [parse_line(line) for line in lines]
+    total = sum([gameid for gameid, handfuls in lines if is_allowed(handfuls)])
+    print(total)

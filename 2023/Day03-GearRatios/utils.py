@@ -37,6 +37,11 @@ def check_right(match: int, line: str):
 
 
 def check_around(match: int, lines: list[str]):
+    values, lines = get_adyacent_values(match, lines)
+    return sum(values), lines
+
+
+def get_adyacent_values(match: int, lines: list[str]):
     line_above, line_actual, line_below = lines
     left, line_actual = check_left(match, line_actual)
     right, line_actual = check_right(match, line_actual)
@@ -50,6 +55,6 @@ def check_around(match: int, lines: list[str]):
     if not below:
         lb_diag, line_below = check_left(match, line_below)
         rb_diag, line_below = check_right(match, line_below)
-    value = left + right + above + la_diag \
-        + ra_diag + below + lb_diag + rb_diag
+    value = [left, right, above, la_diag,
+             ra_diag, below, lb_diag, rb_diag]
     return value, [line_above, line_actual, line_below]

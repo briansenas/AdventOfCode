@@ -17,7 +17,7 @@ it should be easy to work out which part is missing.
 Apparently any number adjacent to a symbol, even diagonally,
 is a "part number" and should be included in your sum (4361)
 [PART TWO]
-
+For each symbol with more than 2 adyacent numbers, multiply them.
 """
 import re
 import math as m

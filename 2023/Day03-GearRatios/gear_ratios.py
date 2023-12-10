@@ -89,7 +89,7 @@ def mul_symbols(lines: list[str]):
 
 
 def read_file(filename: str):
-    with open(input_args.input, 'r') as file:
+    with open(filename, 'r') as file:
         lines = file.readlines()
     lines = [x.strip('\n') for x in lines]
     return lines

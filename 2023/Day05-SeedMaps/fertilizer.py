@@ -2,14 +2,6 @@ import argparse
 import re
 
 
-def generate_map(
-    destination: int,
-    source: int,
-    length: int
-):
-    return {source: (destination, length)}
-
-
 def parse_maps(
     maps: list[list[str]],
 ):
@@ -28,7 +20,7 @@ def parse_maps(
         source_keys = [int(source_keys[i]) for i in indexes]
         destination_keys = [int(destination_keys[i]) for i in indexes]
         lengths = [int(lengths[i]) for i in indexes]
-        fertilizer_map.append((source_keys, destination_keys, lengths))
+        fertilizer_map.append([source_keys, destination_keys, lengths])
     return fertilizer_map
 
 
@@ -70,6 +62,17 @@ def search_locations(
     return locations
 
 
+def search_min_location(
+    seeds: list[int],
+    fertilizer_map: list[list[dict]],
+):
+    min_location = 99999999999999999
+    for seed in seeds:
+        location = search_location(seed, fertilizer_map)
+        min_location = min(min_location, location)
+    return min_location
+
+
 def read_file(filename: str):
     regex_expr = re.compile(r".*?map:")
     with open(input_args.input, 'r') as file:
@@ -94,4 +97,15 @@ if __name__ == '__main__':
     seeds, maps = read_file(input_args.input)
     fertilizer_map = parse_maps(maps)
     locations = search_locations(seeds, fertilizer_map)
-    print(min(locations))
+    print(f"Part 1: Find minimum location of all seeds: {min(locations)}")
+    min_location = 10290310293
+    for i in range(0, len(seeds)-1, 2):
+        initial_seed = seeds[i]
+        seed_range = seeds[i+1]
+        range_seeds = range(initial_seed, initial_seed + seed_range)
+        locations = search_min_location(
+            range_seeds,
+            fertilizer_map
+        )
+        min_location = min(min_location, locations)
+    print(f"Part 2: Treat seeds pairs as intervals: {min_location}")

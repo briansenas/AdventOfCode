@@ -47,3 +47,9 @@ Seed 14, soil 14, fertilizer 53, water 49, light 42, temperature 42, humidity 43
 Seed 55, soil 57, fertilizer 57, water 53, light 46, temperature 82, humidity 82, location 86.
 Seed 13, soil 13, fertilizer 52, water 41, light 34, temperature 34, humidity 35, location 35.
 ```
+
+## Part 2: 
+The seeds line actually describes ranges of seed numbers.
+seeds: 79 14 -> means seeds from 79 til 95
+
+What is the lowest location number from all seeds?. In the example above: `46`

@@ -10,3 +10,10 @@ We need to assure we win the race. Therefore we are aiming to surpass those reco
 To do so, we must note the following:
 
 "Your toy boat has a starting speed of __zero millimeters per millisecond__. For each whole millisecond you spend at the beginning of the race holding down the button, the __boat's speed increases by one millimeter per millisecond__. "
+
+## Part 2:
+BIG BOY NUMBERS
+```
+Time:      71530
+Distance:  940200
+```

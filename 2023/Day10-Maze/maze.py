@@ -15,6 +15,9 @@ class Index:
     def __sub__(self, other):
         return Index(self.i - other.i, self.j - other.j)
 
+    def __neg__(self):
+        return Index(-self.i, -self.j)
+
     def __eq__(self, other):
         return self.i == other.i and self.j == other.j
 
@@ -35,14 +38,14 @@ class Index:
 
 
 Displacements = {
-    "|": [Index(1, 0), Index(-1, 0)],
-    "J": [Index(1, 0), Index(0, 1)],
-    "L": [Index(1, 0), Index(0, -1)],
-    "7": [Index(-1, 0), Index(0, 1)],
-    "F": [Index(-1, 0), Index(0, -1)],
-    "-": [Index(0, -1), Index(0, 1)],
+    "|": {Index(1, 0), Index(-1, 0)},
+    "J": {Index(1, 0), Index(0, 1)},
+    "L": {Index(1, 0), Index(0, -1)},
+    "7": {Index(-1, 0), Index(0, 1)},
+    "F": {Index(-1, 0), Index(0, -1)},
+    "-": {Index(0, -1), Index(0, 1)},
     ".": [],
-    "S": [],
+    "S": {Index(i, j) for i in range(-1, 2) for j in range(-1, 2)},
 }
 
 
@@ -109,7 +112,7 @@ def read_file(input_file):
 
 def get_4dof_neighbours(maze, point):
     return filter(
-        lambda x: x.i >= 0 and x.i < len(maze) and x.j >= 0 and x.j < len(maze[0]),
+        lambda x: x.i >= 0 and x.i < len(maze) and x.j >= 0 and x.j < len(maze.maze[0]),
         [
             Index(point.i + 1, point.j),
             Index(point.i, point.j + 1),
@@ -120,9 +123,12 @@ def get_4dof_neighbours(maze, point):
 
 
 def can_move_to(maze: Maze, from_: Index, to_: Index):
-    for displacement in Displacements[maze[to_]]:
-        if Index(0, 0) <= from_ + displacement < Index(len(maze), len(maze.maze[0])):
-            if from_ + displacement == to_:
+    for displacement in Displacements[maze[from_]]:
+        if Index(0, 0) <= from_ - displacement < Index(len(maze), len(maze.maze[0])):
+            if (
+                from_ - displacement == to_
+                and -displacement in Displacements[maze[to_]]
+            ):
                 return True
     return False
 
@@ -144,9 +150,9 @@ def transverse_maze(maze):
         neighb = neighbours.popleft()
         visited.add(neighb)
         new_neighs = get_4dof_neighbours(maze, neighb)
-        new_neighs = filter(lambda x: can_move_to(maze, neighb, x), new_neighs)
-        new_neighs = filter(lambda x: x not in visited, new_neighs)
-        for valid in new_neighs:
+        new_neighs = list(filter(lambda x: can_move_to(maze, neighb, x), new_neighs))
+        valid_neighs = list(filter(lambda x: x not in visited, new_neighs))
+        for valid in valid_neighs:
             mapped_maze[valid] = mapped_maze[neighb] + 1
             neighbours.append(valid)
     return mapped_maze.max_value
